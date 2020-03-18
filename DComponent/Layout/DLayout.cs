@@ -24,13 +24,10 @@ namespace DComponent
         protected override void OnInitialized()
         {           
             base.OnInitialized();
-            if (string.IsNullOrEmpty(Id))
-            {
-                _renderFinish = false;
-                _isLayoutChild = false;
-                Id = $"DC{Guid.NewGuid().ToString().Replace("-", "")}";
-                _dLayout = new DLayoutHandler(StateHasChanged);
-            }
+            _renderFinish = false;
+            _isLayoutChild = false;
+            Id = $"DC{Guid.NewGuid().ToString().Replace("-", "")}";
+            _dLayout = new DLayoutHandler(StateHasChanged);
         }
 
         protected override async Task OnParametersSetAsync()

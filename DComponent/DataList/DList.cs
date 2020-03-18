@@ -41,12 +41,9 @@ namespace DComponent
         protected override void OnInitialized()
         {
             base.OnInitialized();
-            if (string.IsNullOrEmpty(Id))
-            {
-                Id = $"DC{Guid.NewGuid().ToString().Replace("-", "")}";
-                SelectedData = new List<TItem>();
-                _dataProps = Data.GetType().GetGenericArguments()[0].GetProperties();
-            }            
+            Id = $"DC{Guid.NewGuid().ToString().Replace("-", "")}";
+            SelectedData = new List<TItem>();
+            _dataProps = Data.GetType().GetGenericArguments()[0].GetProperties();
         }
 
         private void Refresh()

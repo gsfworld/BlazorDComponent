@@ -42,8 +42,8 @@ namespace DComponent
         protected override void OnInitialized()
         {
             base.OnInitialized();
-            if (string.IsNullOrEmpty(Id))
-                Id = $"DC{Guid.NewGuid().ToString().Replace("-", "")}";
+            Id = $"DC{Guid.NewGuid().ToString().Replace("-", "")}";
+
         }
     }
 }

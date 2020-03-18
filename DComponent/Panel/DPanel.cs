@@ -14,6 +14,8 @@ namespace DComponent
         [Parameter]
         public RenderFragment HeaderContent { get; set; }
         [Parameter]
+        public string Style { get; set; }
+        [Parameter]
         public RenderFragment BodyContent { get; set; }
         [Parameter]
         public RenderFragment FooterContent { get; set; }
@@ -26,13 +28,10 @@ namespace DComponent
         protected override void OnInitialized()
         {
             base.OnInitialized();
-            if (string.IsNullOrEmpty(Id))
-            {
-                height = 0;
-                Id = $"DC{Guid.NewGuid().ToString().Replace("-", "")}";
-                headerId = $"header{Id}";
-                footerId = $"footer{Id}";
-            }
+            height = 0;
+            Id = $"DC{Guid.NewGuid().ToString().Replace("-", "")}";
+            headerId = $"header{Id}";
+            footerId = $"footer{Id}";
         }
 
         protected override async Task OnParametersSetAsync()
