@@ -1,0 +1,16 @@
+﻿@namespace DComponent
+@if (SelectMode == SelectMode.M)
+{
+    bool rowSelected = TableState.GetRowChecked(Row);
+    <td rowspan="1" colspan="1" title="勾选选择行">
+        <input type="checkbox" checked="@rowSelected" @onchange="@(e=>TableState.UpdateRowChecked(Row,!rowSelected,SelectMode))" />
+    </td>
+}
+@code {
+    [CascadingParameter]
+    protected TableStateHandler TableState { get; set; }
+    [Parameter]
+    public object Row { get; set; }
+    [Parameter]
+    public SelectMode SelectMode { get; set; }
+}

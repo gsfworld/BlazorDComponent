@@ -1,0 +1,40 @@
+﻿@namespace DComponent
+@typeparam TItem
+@code {
+    [CascadingParameter]
+    protected TableStateHandler TableState { get; set; }
+    //[Parameter]
+    //public TableStateHandler TableState { get; set; }
+    [Parameter]
+    public string FieldName { get; set; }
+    [Parameter]
+    public string Caption { get; set; }
+    [Parameter]
+    public List<TItem> Data { get; set; }
+    [Parameter]
+    public string DisplayField { get; set; }
+    [Parameter]
+    public string ValueField { get; set; }
+    [Parameter]
+    public string Width { get; set; } = "300px";
+    [Parameter]
+    public FieldEditMode EditMode { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        TableState.InitColumn(new Column
+        {
+            CType = ColumnType.L,
+            Property = TableState.DataProps.First(v => v.Name == FieldName),
+            CWidth = Width,
+            Caption = Caption,
+            CData = Data as IEnumerable<object>,
+            DisplayField = DisplayField,
+            ValueField = ValueField,
+            DataType = Data.GetType().GetGenericArguments()[0],
+            ShowFilter = true,
+            EditMode = EditMode
+        });
+    }
+}

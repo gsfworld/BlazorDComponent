@@ -1,0 +1,455 @@
+﻿@namespace DComponent
+@typeparam TItem
+@implements IDisposable
+@using System.Reflection
+<CascadingValue Value="_dTable">
+    @ColumnContext
+</CascadingValue>
+@if (_dTable.Columns.Count == 0)
+{
+    <div>加载中...</div>
+}
+else
+{
+    var colspanlength = 0;
+    <div class="h-100">
+        <table class="table text-nowrap table-striped table-bordered table-hover">
+            <thead class="thead-light">
+                @*标题*@
+                <tr>
+                    @if (ShowGroup && _dTable.Columns.Any(p => p.Value.IsGroup))//分组
+                    {
+                        <th rowspan="1" colspan="1"></th>
+                        colspanlength++;
+                    }
+                    @if (_dTable.Columns.Any(p => p.Value.CType == ColumnType.O)
+                 || AllowEdit)//command列
+                    {
+                        colspanlength++;
+                        var commandColumn = _dTable.Columns.FirstOrDefault(p => p.Value.CType == ColumnType.O);
+                        <th rowspan="1" colspan="1">
+                            <div class="d-flex justify-content-center">
+                                @if (AllowEdit)
+                                {
+                                    <button class="toolbarBtn btn btn-link" name="新增" title="新增" @onclick="@(e=> { rowEdit = RowEditMode.New; })">
+                                        <i class="fa fa-plus-circle fa-2x"></i>
+                                    </button>
+                                }
+                                @(commandColumn.Value?.HerderContext)
+                            </div>
+                        </th>
+                    }
+                    @if (ShowRowDetail)//展开明细列
+                    {
+                        colspanlength++;
+                        <th rowspan="1" colspan="1"></th>
+                    }
+                    @if (SelectMode == SelectMode.M)//选择列
+                    {
+                        colspanlength++;
+                        <th rowspan="1" colspan="1" title="选择全部">
+                            <input type="checkbox" checked="@_dTable.AllRowChecked" @onchange="@(e => _dTable.UpdateRowAllChecked(e))" />
+                        </th>
+                    }
+
+                    @foreach ((string _, Column column) in _dTable.Columns.Where(p => p.Value.CType != ColumnType.O))//排序列
+                    {
+                        colspanlength++;
+                        var field = column.Property;    //可以排序列
+                        <th>
+                            <div class="d-flex justify-content-between">
+                                @column.Caption
+                                @if (ShowGroup)
+                                {
+                                    @if (column.IsGroup)
+                                    {
+                                        <button class="btn btn-link" @onclick="@(() => _dTable.UpdateSort(field.Name))">
+                                            <i class="@_dTable.SortDir(field.Name)"></i>
+                                        </button>
+                                    }
+                                }
+                                else
+                                {
+                                    <button class="btn btn-link" @onclick="@(() => _dTable.UpdateSort(field.Name))">
+                                        <i class="@_dTable.SortDir(field.Name)"></i>
+                                    </button>
+                                }
+                            </div>
+                        </th>
+                    }
+                </tr>
+                @*过滤*@
+                @if (ShowFilter)
+                {
+                    <tr>
+                        @if (ShowGroup && _dTable.Columns.Any(p => p.Value.IsGroup))//分组
+                        {
+                            <th rowspan="1" colspan="1"></th>
+                        }
+                        @if (_dTable.Columns.Any(p => p.Value.CType == ColumnType.O) || AllowEdit)
+                        {
+                            <th rowspan="1" colspan="1">
+                            </th>
+                        }
+                        @if (ShowRowDetail)
+                        {
+                            <th rowspan="1" colspan="1">
+                            </th>
+                        }
+                        @if (SelectMode == SelectMode.M)
+                        {
+                            <th rowspan="1" colspan="1">
+                            </th>
+                        }
+                        @foreach ((string _, Column column) in _dTable.Columns.Where(p => p.Value.CType != ColumnType.O))
+                        {
+                            @if (column.ShowFilter)
+                            {
+                                <th>
+                                    <TableColumnFilter TableState="@_dTable" FieldName="@column.Property.Name"></TableColumnFilter>
+                                </th>
+                            }
+                            else
+                            {
+                                <th rowspan="1" colspan="1">
+                                </th>
+                            }
+
+                        }
+                    </tr>
+                }
+
+            </thead>
+            <tbody>
+                @if (rowEdit == RowEditMode.New)
+                {
+                    <tr>
+                        <td colspan="@colspanlength">
+                            <CascadingValue Value="@_dTable">
+                                <DTableEditRowDetail Row="@(Activator.CreateInstance(_dTable.DataType))"
+                                                     ValidSubmitEvent="@(e=> { if (NewOkClick.HasDelegate) NewOkClick.InvokeAsync((TItem)e); })"
+                                                     CancelEvent="@(e=> { rowEdit = RowEditMode.None; })">
+                                </DTableEditRowDetail>
+                            </CascadingValue>
+                        </td>
+                    </tr>
+                }
+                @{rowData = ShowGroup ? _dTable.GroupPageData() : _dTable.PageData();}
+                @if (ShowGroup && _dTable.Columns.Any(p => p.Value.IsGroup))//分组
+                {
+                    @if (ShowGroup && _dTable.Columns.Any(p => p.Value.IsGroup))//分组
+                    {
+                        var groupColumn = _dTable.Columns.First(p => p.Value.IsGroup);
+                        var GroupData = rowData.Select(p => p.GetType().GetProperty(groupColumn.Value.Property.Name).GetValue(p)).Distinct();
+                        @foreach (var groupItem in GroupData)
+                        {
+                            var expandName = groupItem.ToString();
+                            var expanded = _dTable.GetGroupExpandRow(expandName);
+                            var dData = rowData.Where(p => p.GetType().GetProperty(groupColumn.Value.Property.Name).GetValue(p).ToString() == groupItem.ToString());
+                            <tr>
+                                <td>
+                                    <button class="btn btn-link" title="展开分组" @onclick="@(() => _dTable.UpdateGroupExpandRow(expandName, !expanded))">
+                                        <i class="@_dTable.GroupExpandRowDir(expandName)"></i>
+                                    </button>
+                                </td>
+                                @{
+                                    var cols = _dTable.Columns.Where(p => p.Value.CType != ColumnType.O).Count();
+                                    if (_dTable.Columns.Any(p => p.Value.CType == ColumnType.O)) cols++;
+                                    if (ShowRowDetail) cols++;
+                                    if (SelectMode == SelectMode.M) cols++;
+
+                                }
+                                <td colspan="@colspanlength">
+                                    <div class="d-flex justify-content-start">
+                                        <span class="ml-2">@groupItem</span>
+                                        @if (groupColumn.Value.GroupStateType == ColumnStateType.C)
+                                        {
+                                            var columnState = dData.Count();
+                                            <span class="ml-2">@string.Format(groupColumn.Value.GroupMark, columnState)</span>}
+                                        @if (groupColumn.Value.GroupStateType == ColumnStateType.S)
+                                        {
+                                            var isDecimal = false;
+                                            if (groupColumn.Value.DataType == typeof(decimal) || groupColumn.Value.DataType == typeof(int))
+                                                isDecimal = true;
+                                            @if (isDecimal)
+                                            {
+                                                var columnState = dData.Sum(p => Convert.ToDecimal(p.GetType().GetProperty(groupColumn.Value.GroupStateFieldName).GetValue(p)));
+                                                <span>@string.Format(groupColumn.Value.GroupMark, columnState)</span>
+                                            }
+                                            else
+                                            {
+                                                <span>@string.Format(groupColumn.Value.GroupMark, "类型错误")</span>
+                                            }
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+
+                            @if (expanded)
+                            {
+                                <CascadingValue Value="@_dTable">
+                                    @foreach (var detail in dData)
+                                    {
+                                        bool rowSelected = _dTable.GetRowChecked(detail);
+                                        <tr class="@(rowSelected ? "bg-info" : "")" @onclick="@(e => { if (SelectMode == SelectMode.S) _dTable.UpdateRowChecked(detail, !rowSelected, SelectMode); })">
+                                            @if (ShowGroup && _dTable.Columns.Any(p => p.Value.IsGroup))
+                                            {
+                                                <td rowspan="1" colspan="1">
+                                                </td>
+                                            }
+
+                                            @*//command列*@
+                                            <DTableCommandDetail Row="@detail"
+                                                                 AllowEdit="@AllowEdit"
+                                                                 rowEdit="@rowEdit"
+                                                                 rowEditChanged="@(e=> {
+                                                                                       rowEdit = e;
+                                                                                       if (e == RowEditMode.Edit)
+                                                                                           CurrentEditRow = detail;
+                                                                                   })">
+                                            </DTableCommandDetail>
+
+                                            @*//明细列*@
+                                            <DTableDRowDetail Row="@detail" ShowRowDetail="@ShowRowDetail"></DTableDRowDetail>
+                                            @*//选择列*@
+                                            <DTableSelectRowDetail Row="@detail" SelectMode="@SelectMode"></DTableSelectRowDetail>
+                                            <DTableRowDetail Row="@detail"></DTableRowDetail>
+                                        </tr>
+                                        @if (rowEdit == RowEditMode.Edit && CurrentEditRow == detail)
+                                        {
+                                            <tr>
+                                                <td colspan="@colspanlength">
+                                                    @if (EditRowContext != null)
+                                                    {
+                                                        <DTableEditRowDetail Row="@detail"
+                                                                             ValidSubmitEvent="@(e=> { if (EditOkClick.HasDelegate) EditOkClick.InvokeAsync((TItem)e); })"
+                                                                             CancelEvent="@(e=> { rowEdit = RowEditMode.None; })">
+                                                            <EditRowContext>
+                                                                @EditRowContext(detail)
+                                                            </EditRowContext>
+                                                        </DTableEditRowDetail>
+                                                    }
+                                                    else
+                                                    {
+                                                        <DTableEditRowDetail Row="@detail"
+                                                                             ValidSubmitEvent="@(e=> { if (EditOkClick.HasDelegate) EditOkClick.InvokeAsync((TItem)e); })"
+                                                                             CancelEvent="@(e=> { rowEdit = RowEditMode.None; })">
+                                                        </DTableEditRowDetail>
+                                                    }
+                                                </td>
+                                            </tr>
+
+                                        }
+                                        <DTableDRowRenderDetail Row="@detail" ShowGroup="@ShowGroup" ShowRowDetail="@ShowRowDetail">
+                                            <RowDetailContext>
+                                                @RowDetailContext.Invoke(detail)
+                                            </RowDetailContext>
+                                        </DTableDRowRenderDetail>
+                                    }
+                                </CascadingValue>
+
+                            }
+
+                        }
+
+                    }
+                }
+                else
+                {
+                    @if (rowData.Count() > 0 && _dTable != null)
+                    {
+                        <CascadingValue Value="@_dTable">
+                            @foreach (var row in rowData)
+                            {
+                                bool rowSelected = _dTable.GetRowChecked(row);
+                                <tr class="@(rowSelected ? "bg-info" : "")" @onclick="@(e => {
+                                                                                if (SelectMode == SelectMode.S)
+                                                                                {
+                                                                                    _dTable.UpdateRowChecked(row, !rowSelected, SelectMode);
+                                                                                    if (!rowSelected)
+                                                                                    {
+                                                                                        SingleSelectedDataRow = (TItem)row;
+                                                                                    if (SingleSelectedDataRowChanged.HasDelegate)
+                                                                                        SingleSelectedDataRowChanged.InvokeAsync((TItem)row);
+                                                                                    }
+
+                                                                                }})">
+
+                                    @*//command列*@
+                                    <DTableCommandDetail Row="@row"
+                                                         AllowEdit="@AllowEdit"
+                                                         rowEdit="@rowEdit"
+                                                         rowEditChanged="@(e=>
+                                                                           {
+                                                                               rowEdit = e;
+                                                                               if (e == RowEditMode.Edit)
+                                                                                   CurrentEditRow = row;
+                                                                           })">
+                                    </DTableCommandDetail>
+                                    @*//明细列*@
+                                    <DTableDRowDetail Row="@row" ShowRowDetail="@ShowRowDetail"></DTableDRowDetail>
+                                    @*//选择列*@
+                                    <DTableSelectRowDetail Row="@row" SelectMode="@SelectMode"></DTableSelectRowDetail>
+                                    <DTableRowDetail Row="@row"></DTableRowDetail>
+                                </tr>
+                                @if (rowEdit == RowEditMode.Edit)
+                                {
+                                    <tr>
+                                        <td colspan="@colspanlength">
+                                            @if (EditRowContext != null)
+                                            {
+                                                <DTableEditRowDetail Row="@row"
+                                                                     ValidSubmitEvent="@(e=> { if (EditOkClick.HasDelegate) EditOkClick.InvokeAsync((TItem)e); })"
+                                                                     CancelEvent="@(e=> { rowEdit = RowEditMode.None; })">
+                                                    <EditRowContext>
+                                                        @EditRowContext(row)
+                                                    </EditRowContext>
+                                                </DTableEditRowDetail>
+                                            }
+                                            else
+                                            {
+                                                <DTableEditRowDetail Row="@row"
+                                                                     ValidSubmitEvent="@(e=> { if (EditOkClick.HasDelegate) EditOkClick.InvokeAsync((TItem)e); })"
+                                                                     CancelEvent="@(e=> { rowEdit = RowEditMode.None; })">
+                                                </DTableEditRowDetail>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                                <DTableDRowRenderDetail Row="@row" ShowGroup="@ShowGroup" ShowRowDetail="@ShowRowDetail">
+                                    <RowDetailContext>
+                                        @RowDetailContext.Invoke(row)
+                                    </RowDetailContext>
+                                </DTableDRowRenderDetail>
+                            }
+
+                            <DTableFooterDetail RowData="@rowData" ShowFooter="@ShowFooter" SelectMode="@SelectMode" ShowGroup="@ShowGroup"></DTableFooterDetail>
+                        </CascadingValue>
+                    }
+                }
+            </tbody>
+
+        </table>
+        @if (ShowPager)
+        {<div class="d-flex justify-content-between m-3">
+                <TablePaginationSize TableState="@_dTable"></TablePaginationSize>
+                <TablePaginationButtons TableState="@_dTable"></TablePaginationButtons>
+            </div>
+        }
+
+    </div>
+}
+
+
+@code {
+    private List<TItem> _Data;
+    [Parameter]
+    public List<TItem> Data
+    {
+        get => _Data;
+        set
+        {
+            _Data = value;
+        }
+    }
+    [Parameter]
+    public RenderFragment ColumnContext { get; set; }
+    [Parameter]
+    public SelectMode SelectMode { get; set; } = SelectMode.S;
+    [Parameter]
+    public int PageSize { get; set; } = 15;
+    [Parameter]
+    public TItem SingleSelectedDataRow { get; set; }
+    [Parameter]
+    public EventCallback<TItem> SingleSelectedDataRowChanged { get; set; }
+    [Parameter]
+    public RenderFragment<object> RowDetailContext { get; set; }
+    [Parameter]
+    public bool ShowFooter { get; set; } = false;
+    [Parameter]
+    public bool ShowFilter { get; set; } = true;
+    [Parameter]
+    public bool ShowPager { get; set; } = true;
+    [Parameter]
+    public bool ShowGroup { get; set; } = false;
+    [Parameter]
+    public bool ShowRowDetail { get; set; } = false;
+    [Parameter]
+    public bool FirstExpandAllGroup { get; set; } = false;
+    [Parameter]
+    public bool FirstExpandAllDetail { get; set; } = false;
+    [Parameter]
+    public bool AllowEdit { get; set; } = false;
+    [Parameter]
+    public EventCallback NewOkClick { get; set; }
+    [Parameter]
+    public EventCallback EditOkClick { get; set; }
+    [Parameter]
+    public EventCallback RemoveOkClick { get; set; }
+    [Parameter]
+    public EventCallback<List<object>> OnSelectRowsChanged { get; set; }
+    private TableStateHandler _dTable;
+    private IEnumerable<object> rowData;
+    [Parameter]
+    public string Id { get; set; }
+    private RowEditMode rowEdit = RowEditMode.None;
+    private object CurrentEditRow;
+
+    [Parameter]
+    public RenderFragment<object> EditRowContext { get; set; }
+
+    public void SetEditRowCancle()
+    {
+        rowEdit = RowEditMode.None;
+    }
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        _dTable = new TableStateHandler(Data as IEnumerable<object>, StateHasChanged, OnSelectRowsChanged, 3, (ShowPager ? PageSize : 0));
+    }
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        //if (_componentStateService.GetComponentState(Id) == null)
+        //{
+
+        //    _componentStateService.AddComponentState(Id, _dTable);
+        //}
+        //else
+        //    _dTable = (TableStateHandler)_componentStateService.GetComponentState(Id);
+        _dTable?.UpdateData(_Data as IEnumerable<object>);
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && _dTable.Columns.Count > 0)
+        {
+            if (FirstExpandAllDetail)
+            {
+                foreach (var row in rowData)
+                {
+                    var expandName = row.GetType().GetProperties().First().GetValue(row)?.ToString();
+                    _dTable.UpdateDetailExpandRowNoRender(expandName, true);
+                }
+
+            }
+            await InvokeAsync(StateHasChanged);
+        }
+        //_componentStateService.UpdateComponentState(Id, _dTable);
+    }
+
+    public void ResetFilterValue()
+    {
+        _dTable.ResetFilterValue();
+    }
+
+    public void ResetSorting()
+    {
+        _dTable.ResetSorting();
+    }
+
+    public void Dispose()
+    {
+        //_componentStateService.RemoveComponentState(Id);
+    }
+}
+

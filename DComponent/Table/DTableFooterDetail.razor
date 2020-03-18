@@ -1,0 +1,80 @@
+﻿@namespace DComponent
+@if (ShowFooter)
+{
+    <tr class="bg-light">
+
+        @if (ShowGroup && TableState.Columns.Any(p => p.Value.IsGroup))//分组
+        {
+            <td rowspan="1" colspan="1"></td>
+        }
+        @if (TableState.Columns.Any(p => p.Value.CType == ColumnType.O))
+        {
+            <td rowspan="1" colspan="1">
+            </td>
+        }
+        @if (ShowRowDetail)
+        {
+            <td rowspan="1" colspan="1">
+            </td>
+        }
+        @if (SelectMode == SelectMode.M)
+        {
+            <th rowspan="1" colspan="1">
+            </th>
+        }
+        @foreach ((string _, Column column) in TableState.Columns.Where(p => p.Value.CType != ColumnType.O))
+        {
+            @if (string.IsNullOrEmpty(column.FooterMark))
+            {
+                <td rowspan="1" colspan="1">
+                </td>
+            }
+            else
+            {
+                @if (column.FooterStateType == ColumnStateType.C)
+                {
+                    var columnState = RowData.Count();
+                    <td rowspan="1" colspan="1">
+                        <span>@string.Format(column.FooterMark, columnState)</span>
+                    </td>
+                }
+                @if (column.FooterStateType == ColumnStateType.S)
+                {
+                    var isDecimal = false;
+                    if (column.DataType == typeof(decimal) || column.DataType == typeof(int))
+                        isDecimal = true;
+                    @if (isDecimal)
+                    {
+                        var columnState = RowData.Sum(p => Convert.ToDecimal(p.GetType().GetProperty(column.Property.Name).GetValue(p)));
+                        <td rowspan="1" colspan="1">
+                            <span>@string.Format(column.FooterMark, columnState)</span>
+                        </td>
+                    }
+                    else
+                    {
+                        <td rowspan="1" colspan="1">
+                            <span>@string.Format(column.FooterMark, "类型错误")</span>
+                        </td>
+                    }
+                }
+
+            }
+        }
+    </tr>
+
+}
+
+@code {
+    [CascadingParameter]
+    protected TableStateHandler TableState { get; set; }
+    [Parameter]
+    public IEnumerable<object> RowData { get; set; }
+    [Parameter]
+    public bool ShowGroup { get; set; }
+    [Parameter]
+    public bool ShowFooter { get; set; }
+    [Parameter]
+    public SelectMode SelectMode { get; set; }
+    [Parameter]
+    public bool ShowRowDetail { get; set; } = false;
+}

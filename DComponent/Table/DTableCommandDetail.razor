@@ -1,0 +1,33 @@
+﻿@namespace DComponent
+@if (TableState.Columns.Any(p => p.Value.CType == ColumnType.O) || AllowEdit)
+{
+    var commandColumn = TableState.Columns.FirstOrDefault(p => p.Value.CType == ColumnType.O);
+    <td rowspan="1" colspan="1">
+        <div class="d-flex justify-content-center" style="max-height:40px;">
+            @if (AllowEdit)
+            {
+                <button class="toolbarBtn btn btn-link" name="编辑" title="编辑" @onclick="@(e=> {
+                                                                                         rowEdit = RowEditMode.Edit;
+                                                                                         if (rowEditChanged.HasDelegate)
+                                                                                             rowEditChanged.InvokeAsync(rowEdit);
+                                                                                     })">
+                    <i class="fa fa-pencil fa-2x"></i>
+                </button>
+            }
+            @(commandColumn.Value?.CommandContext(Row))
+        </div>
+    </td>
+}
+
+@code {
+    [CascadingParameter]
+    protected TableStateHandler TableState { get; set; }
+    [Parameter]
+    public object Row { get; set; }
+    [Parameter]
+    public bool AllowEdit { get; set; } = false;
+    [Parameter]
+    public RowEditMode rowEdit { get; set; }
+    [Parameter]
+    public EventCallback<RowEditMode> rowEditChanged { get; set; }
+}

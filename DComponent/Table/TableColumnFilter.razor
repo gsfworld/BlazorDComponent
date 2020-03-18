@@ -1,0 +1,13 @@
+﻿@namespace DComponent
+<div class="d-flex justify-content-start">
+    <DLookupEdit Data="@FilterCondition.FConditionData" Width="60px" SelectedValue="@(TableState.Columns[FieldName].FCondition.ToString())" DisplayField="@nameof(FCondition.FName)" ValueField="@nameof(FCondition.FValue)" SelectedValueChanged="@(e=> { TableState.UpdateColumnFilterContidion(e,FieldName); })"></DLookupEdit>
+    <input class="form-control border border-info" style="min-width:60px;" type="text" name="Table_Filter_@FieldName" value="@TableState.ColumnValue(FieldName)" @oninput="@(args => { TableState.UpdateColumnValue(args, FieldName); })" />
+</div>
+
+@code {
+    [Parameter]
+    public TableStateHandler TableState { get; set; }
+
+    [Parameter]
+    public string FieldName { get; set; }
+}
