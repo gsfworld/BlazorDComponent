@@ -6,10 +6,10 @@
     </option>
     @if (Data != null && !string.IsNullOrEmpty(DisplayField) && !string.IsNullOrEmpty(ValueField))
     {
-        var dataType = Data.GetType().GetGenericArguments()[0];
-        var dataProps = dataType.GetProperties();
-        if (dataProps.All(v => v.Name != DisplayField)) return;
-        if (dataProps.All(v => v.Name != ValueField)) return;
+        //var dataType = Data.GetType().GetGenericArguments()[0];
+        //var dataProps = dataType.GetProperties();
+        //if (dataProps.All(v => v.Name != DisplayField)) return;
+        //if (dataProps.All(v => v.Name != ValueField)) return;
         @foreach (var item in Data)
         {
             var itemValue = item.GetType().GetProperty(ValueField).GetValue(item).ToString();

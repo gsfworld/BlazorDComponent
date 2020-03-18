@@ -56,12 +56,12 @@ else
                                 </DFormLayoutItem>
                                 break;
                             case ColumnType.L:
-                                var cData = column.CData.Select(p => Convert.ChangeType(p, column.DataType)).ToList();
+                                //var cData = column.CData.Select(p => Convert.ChangeType(p, column.DataType)).ToList();
                                 <DFormLayoutItem Caption="@($"{column.Caption}:")" ColSpan="6">
                                     <Template>
-                                        <DLookupEdit Data="@cData" Id="@(column.Property.Name)"
+                                        <DLookupEdit Data="@column.CData.ToList()" Id="@(column.Property.Name)"
                                                      ReadOnly="@(column.EditMode==FieldEditMode.ReadOnly?true:false)"
-                                                     SelectedValue="@value.ToString()"
+                                                     SelectedValue="@value?.ToString()"
                                                      SelectedValueChanged="@(e=>column.Property.SetValue(editRow,e))"
                                                      DisplayField="@column.DisplayField"
                                                      ValueField="@column.ValueField"></DLookupEdit>

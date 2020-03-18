@@ -49,13 +49,12 @@
         <DLayoutLeft Header="测试left" WidthP="20">
             <DLayout>
                 <DLayoutCenter Header="layout嵌套测试center">
-                    <div><span><i class="fa fa-plus-circle fa-2x"></i></span></div>
+                    <DLookupEdit Data="@_Org" DisplayField="@nameof(SysOrg.OrgName)" ValueField="@nameof(SysOrg.OrgId)"></DLookupEdit>
                 </DLayoutCenter>
             </DLayout>
         </DLayoutLeft>
         <DLayoutCenter Header="测试center">
-            <DTable Data="@_user" SelectMode="@SelectMode.M"
-                    ShowFooter="true"
+            <DTable Data="@_user" SelectMode="@SelectMode.M"                    
                     ShowGroup="true"
                     ShowRowDetail="true"
                     AllowEdit="true"
@@ -64,6 +63,7 @@
                     <DTableTextColumn FieldName="@nameof(SysUser.UserId)" Caption="编号" EditMode="@FieldEditMode.ReadOnly" FooterMark="合计：{0}" FooterStateType="@ColumnStateType.S"></DTableTextColumn>
                     <DTableTextColumn FieldName="@nameof(SysUser.LoginId)" Caption="账号" FooterMark="记录总数：{0}"></DTableTextColumn>
                     <DTableTextColumn FieldName="@nameof(SysUser.UserName)" Caption="名称" IsGroup="true" GroupMark="分组记录数：{0}"></DTableTextColumn>
+                    <DTableDateTimeColumn FieldName="@nameof(SysUser.CreateDate)" Caption="创建时间"></DTableDateTimeColumn>
                     <DTableCustomColumn FieldName="@nameof(SysUser.IsOnline)" Caption="在线？">
                         <CustomContext>
                             <button class="toolbarBtn btn btn-link " name="编辑" title="编辑">
@@ -73,7 +73,7 @@
                         </CustomContext>
                     </DTableCustomColumn>
                     <DTableCheckboxColumn FieldName="@nameof(SysUser.IsUse)" Caption="启用？" ShowFilter="false"></DTableCheckboxColumn>
-                    @*<DTableLookupColumn FieldName="@nameof(SysUser.OrgId)" Data="_Org" DisplayField="@nameof(SysOrg.OrgName)" ValueField="@nameof(SysOrg.OrgId)" Caption="所属部门"></DTableLookupColumn>*@
+                    <DTableLookupColumn FieldName="@nameof(SysUser.OrgId)" Data="_Org" DisplayField="@nameof(SysOrg.OrgName)" ValueField="@nameof(SysOrg.OrgId)" Caption="所属部门"></DTableLookupColumn>
                 </ColumnContext>                
                 <RowDetailContext>
                     <div>@((context as SysUser).UserName)</div>
@@ -97,7 +97,7 @@
             </DFormLayoutItem>
             <DFormLayoutItem Caption="测试6" ColSpan="6">
                 <Template>
-                    <DSpinEdit></DSpinEdit>
+                    <DLookupEdit Data="@_Org" DisplayField="@nameof(SysOrg.OrgName)" ValueField="@nameof(SysOrg.OrgId)"></DLookupEdit>
                 </Template>
             </DFormLayoutItem>
             <DFormLayoutItem Caption="测试12" ColSpan="6">
@@ -140,7 +140,8 @@
                 UserName="张1",
                 IsOnline="N",
                 IsUse="Y",
-                OrgId="o1"
+                OrgId="o1",
+                CreateDate=DateTime.Now
             },
             new SysUser
             {
@@ -149,7 +150,8 @@
                 UserName="张2",
                 IsOnline="N",
                 IsUse="Y",
-                OrgId="o1"
+                OrgId="o1",
+                CreateDate=DateTime.Now
             },
             new SysUser
             {
@@ -158,7 +160,8 @@
                 UserName="张3",
                 IsOnline="N",
                 IsUse="Y",
-                OrgId="o2"
+                OrgId="o2",
+                CreateDate=DateTime.Now
             },
             new SysUser
             {
@@ -167,7 +170,8 @@
                 UserName="张4",
                 IsOnline="N",
                 IsUse="Y",
-                OrgId="o2"
+                OrgId="o2",
+                CreateDate=DateTime.Now
             }
         };
 
@@ -194,6 +198,7 @@
         public string IsOnline { get; set; }
         public string IsUse { get; set; }
         public string OrgId { get; set; }
+        public DateTime CreateDate { get; set; }
     }
 
     public class SysOrg
