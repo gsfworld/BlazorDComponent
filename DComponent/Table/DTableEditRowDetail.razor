@@ -14,8 +14,8 @@ else
                                     CancelEvent.InvokeAsync(editRow);
                             })" Context="EditFormContext"
               EditContext="@(new EditContext(editRow))">
-        <div class="panel">
-            <div class="panel-body">
+        <DPanel>
+            <BodyContent>
                 <DataAnnotationsValidator />
                 <ValidationSummary />
                 <DFormLayout>
@@ -25,7 +25,7 @@ else
                         switch (column.CType)
                         {
                             case ColumnType.T:
-                                <DFormLayoutItem Caption="@($"{column.Caption}:")">
+                                <DFormLayoutItem Caption="@($"{column.Caption}:")" ColSpan="6">
                                     <Template>
                                         <input type="text" id="@(column.Property.Name))" class="form-control"
                                                value="@(value.ToString())"
@@ -35,7 +35,7 @@ else
                                 </DFormLayoutItem>
                                 break;
                             case ColumnType.D:
-                                <DFormLayoutItem Caption="@($"{column.Caption}:")">
+                                <DFormLayoutItem Caption="@($"{column.Caption}:")" ColSpan="6">
                                     <Template>
                                         <DDate DateValue="@(Convert.ToDateTime(value))" Id="@(column.Property.Name)"
                                                DateValueChanged="@((e=>column.Property.SetValue(editRow,e)))"
@@ -46,7 +46,7 @@ else
                                 break;
                             case ColumnType.C:
                                 var check = value.ToString() == column.CheckValue;
-                                <DFormLayoutItem Caption="@($"{column.Caption}:")">
+                                <DFormLayoutItem Caption="@($"{column.Caption}:")" ColSpan="6">
                                     <Template>
                                         <input type="checkbox" class="form-control" id="@(column.Property.Name))"
                                                checked="@check"
@@ -57,7 +57,7 @@ else
                                 break;
                             case ColumnType.L:
                                 var cData = column.CData.Select(p => Convert.ChangeType(p, column.DataType)).ToList();
-                                <DFormLayoutItem Caption="@($"{column.Caption}:")">
+                                <DFormLayoutItem Caption="@($"{column.Caption}:")" ColSpan="6">
                                     <Template>
                                         <DLookupEdit Data="@cData" Id="@(column.Property.Name)"
                                                      ReadOnly="@(column.EditMode==FieldEditMode.ReadOnly?true:false)"
@@ -69,7 +69,7 @@ else
                                 </DFormLayoutItem>
                                 break;
                             case ColumnType.S:
-                                <DFormLayoutItem Caption="@($"{column.Caption}:")">
+                                <DFormLayoutItem Caption="@($"{column.Caption}:")" ColSpan="6">
                                     <Template>
                                         <DSpinEdit CurrentValue="@(Convert.ToDecimal(value))"
                                                    CurrentValueChanged="@(e=>column.Property.SetValue(editRow,e))"
@@ -81,13 +81,13 @@ else
                         }
 
                     }
-                </DFormLayout>
-            </div>
-            <div class="panel-footer p-3">
+                </DFormLayout>                
+            </BodyContent>
+            <FooterContent>
                 <button type="submit" class="btn btn-primary ml-1">确定</button>
                 <a class="btn btn-primary ml-1" @onclick="@(e => { if (CancelEvent.HasDelegate) CancelEvent.InvokeAsync(e); })">取消</a>
-            </div>
-        </div>
+            </FooterContent>
+        </DPanel>        
     </EditForm>
 }
 

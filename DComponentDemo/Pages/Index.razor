@@ -47,14 +47,38 @@
             <DSpinEdit></DSpinEdit>
         </DLayoutUp>
         <DLayoutLeft Header="测试left" WidthP="20">
-            <span>测试left</span>
-        </DLayoutLeft>
-        <DLayoutCenter Header="测试center">
             <DLayout>
                 <DLayoutCenter Header="layout嵌套测试center">
                     <div><span><i class="fa fa-plus-circle fa-2x"></i></span></div>
                 </DLayoutCenter>
             </DLayout>
+        </DLayoutLeft>
+        <DLayoutCenter Header="测试center">
+            <DTable Data="@_user" SelectMode="@SelectMode.M"
+                    ShowFooter="true"
+                    ShowGroup="true"
+                    ShowRowDetail="true"
+                    AllowEdit="true"
+                    FirstExpandAllGroup="true">
+                <ColumnContext>
+                    <DTableTextColumn FieldName="@nameof(SysUser.UserId)" Caption="编号" EditMode="@FieldEditMode.ReadOnly" FooterMark="合计：{0}" FooterStateType="@ColumnStateType.S"></DTableTextColumn>
+                    <DTableTextColumn FieldName="@nameof(SysUser.LoginId)" Caption="账号" FooterMark="记录总数：{0}"></DTableTextColumn>
+                    <DTableTextColumn FieldName="@nameof(SysUser.UserName)" Caption="名称" IsGroup="true" GroupMark="分组记录数：{0}"></DTableTextColumn>
+                    <DTableCustomColumn FieldName="@nameof(SysUser.IsOnline)" Caption="在线？">
+                        <CustomContext>
+                            <button class="toolbarBtn btn btn-link " name="编辑" title="编辑">
+                                <i class="fa fa-pencil fa-2x"></i>
+                            </button>
+                            @((context as SysUser).UserName)
+                        </CustomContext>
+                    </DTableCustomColumn>
+                    <DTableCheckboxColumn FieldName="@nameof(SysUser.IsUse)" Caption="启用？" ShowFilter="false"></DTableCheckboxColumn>
+                    @*<DTableLookupColumn FieldName="@nameof(SysUser.OrgId)" Data="_Org" DisplayField="@nameof(SysOrg.OrgName)" ValueField="@nameof(SysOrg.OrgId)" Caption="所属部门"></DTableLookupColumn>*@
+                </ColumnContext>                
+                <RowDetailContext>
+                    <div>@((context as SysUser).UserName)</div>
+                </RowDetailContext>               
+            </DTable>
         </DLayoutCenter>
         <DLayoutRight Header="测试right" WidthP="10">
             <div><span><i class="fa fa-plus-circle fa-2x"></i></span></div>
@@ -102,8 +126,79 @@
 @code{
     private List<WeatherForecast> weatherForecast;
     private WeatherForecast[] forecasts;
+    private List<SysUser> _user;
+    private List<SysOrg> _Org;
     protected override async Task OnInitializedAsync()
     {
         forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
+        _user = new List<SysUser>
+        {
+            new SysUser
+            {
+                UserId=Guid.NewGuid().ToString(),
+                LoginId="D1",
+                UserName="张1",
+                IsOnline="N",
+                IsUse="Y",
+                OrgId="o1"
+            },
+            new SysUser
+            {
+                UserId=Guid.NewGuid().ToString(),
+                LoginId="D2",
+                UserName="张2",
+                IsOnline="N",
+                IsUse="Y",
+                OrgId="o1"
+            },
+            new SysUser
+            {
+                UserId=Guid.NewGuid().ToString(),
+                LoginId="D3",
+                UserName="张3",
+                IsOnline="N",
+                IsUse="Y",
+                OrgId="o2"
+            },
+            new SysUser
+            {
+                UserId=Guid.NewGuid().ToString(),
+                LoginId="D4",
+                UserName="张4",
+                IsOnline="N",
+                IsUse="Y",
+                OrgId="o2"
+            }
+        };
+
+        _Org = new List<SysOrg>
+        {
+            new SysOrg
+            {
+                OrgId="o1",
+                OrgName="测试部门1"
+            },
+            new SysOrg
+            {
+                OrgId="o2",
+                OrgName="测试部门2"
+            }
+        };
+    }
+
+    public class SysUser
+    {
+        public string UserId { get; set; }
+        public string LoginId { get; set; }
+        public string UserName { get; set; }
+        public string IsOnline { get; set; }
+        public string IsUse { get; set; }
+        public string OrgId { get; set; }
+    }
+
+    public class SysOrg
+    {
+        public string OrgId { get; set; }
+        public string OrgName { get; set; }
     }
 }
