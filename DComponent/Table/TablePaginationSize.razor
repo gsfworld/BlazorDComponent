@@ -1,4 +1,5 @@
-﻿<div class="d-flex justify-content-start ml-2">
+﻿@namespace DComponent
+<div class="d-flex justify-content-start ml-2">
     <span>每页行数：</span>
     <select class="bootstrap-select" @onchange="@(args => TableState.UpdatePageSize(args))">
         <option selected="@(10 == TableState.Paginate.PageSize)" value="10">10</option>
@@ -11,6 +12,6 @@
 </div>
 
 @code {
-    [Parameter]    
+    [Parameter]
     public TableStateHandler TableState { get; set; }
 }

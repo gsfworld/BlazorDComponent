@@ -1,4 +1,5 @@
-﻿<div class="d-flex justify-content-start ml-2">
+﻿@namespace DComponent
+<div class="d-flex justify-content-start ml-2">
     <button @onclick="@TableState.Paginate.Previous" disabled="@(!TableState.Paginate.CanPrev)" class="btn btn-outline-primary">上一页</button>
     @foreach (int i in TableState.Paginate.Pages())
     {

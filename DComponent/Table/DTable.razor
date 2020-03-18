@@ -23,7 +23,7 @@ else
                         colspanlength++;
                     }
                     @if (_dTable.Columns.Any(p => p.Value.CType == ColumnType.O)
-                 || AllowEdit)//command列
+                || AllowEdit)//command列
                     {
                         colspanlength++;
                         var commandColumn = _dTable.Columns.FirstOrDefault(p => p.Value.CType == ColumnType.O);
