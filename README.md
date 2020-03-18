@@ -1,6 +1,6 @@
 # DComponent
-Blazor企业应用开发组件
-### 具体使用下载代码运行Demo
+Blazor企业应用开发组件 .netcore 3.1
+### 具体使用下载代码运行Demo 
 > 联系邮箱6940926@qq.com
 
 | 组件        | 功能   |
