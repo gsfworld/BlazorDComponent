@@ -1,5 +1,8 @@
 # DComponent
 Blazor企业应用开发组件 .netcore 3.1
+引入资源文件
+<script src="_content/BlazorDComponent/DComponent.js"></script>
+<link href="_content/BlazorDComponent/DComponent.css" rel="stylesheet" />
 ### 具体使用下载代码运行Demo 
 > 联系邮箱6940926@qq.com
 

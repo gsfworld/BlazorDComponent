@@ -7,7 +7,10 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>gsfworld</Authors>
     <Company />
-    <Description>Blazor企业应用开发组件
+    <Description>引入资源文件
+<script src="_content/BlazorDComponent/DComponent.js"></script>
+ <link href="_content/BlazorDComponent/DComponent.css" rel="stylesheet" />
+Blazor企业应用开发组件
 | 组件 | 功能 |
 | DList | 列表方式展示数据 单选绑定 多选绑定(checkbox)
 | DFormLayout |Form按colspan自动布局
