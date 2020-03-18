@@ -1,5 +1,7 @@
 # DComponent
 Blazor企业应用开发组件
+### 具体使用下载代码运行Demo
+> 联系邮箱6940926@qq.com
 
 | 组件        | 功能   |
 | --------   | :-----  |
@@ -10,3 +12,5 @@ Blazor企业应用开发组件
 | DPanel |panel组件 header body footer
 | DSpinEdit |deciaml类型数据维护
 | DTree |树形展示数据，单选绑定 多选绑定(checkbox)，多选级联选择
+
+
