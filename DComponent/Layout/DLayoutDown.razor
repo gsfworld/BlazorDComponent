@@ -1,0 +1,31 @@
+﻿@namespace DComponent
+@code {
+    [CascadingParameter]
+    protected DLayoutHandler _dLayout { get; set; }
+    [Parameter]
+    public string Header { get; set; }
+    [Parameter]
+    public bool Spliter { get; set; }
+    [Parameter]
+    public int HeightP { get; set; } = 0;//百分比
+    [Parameter]
+    public int Height { get; set; } = 0;//px
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        _dLayout.InitElement(new LayoutElement
+        {
+            ElementType = LayoutElementType.D,
+            Id = $"DC{Guid.NewGuid().ToString().Replace("-", "")}",
+            WidthP = 100,
+            HeightP = HeightP,
+            Height = Height,
+            Spliter = Spliter,
+            Header = Header,
+            ElementContext = ChildContent
+        });
+    }
+}

@@ -1,0 +1,22 @@
+﻿@namespace DComponent
+@typeparam TItem
+<select class="bootstrap-select form-control border @Class" style="width:@Width;@style" @bind="@_SelectedValue" disabled="@ReadOnly" id="@Id">
+    <option value="0">
+        请选择...
+    </option>
+    @if (Data != null && !string.IsNullOrEmpty(DisplayField) && !string.IsNullOrEmpty(ValueField))
+    {
+        var dataType = Data.GetType().GetGenericArguments()[0];
+        var dataProps = dataType.GetProperties();
+        if (dataProps.All(v => v.Name != DisplayField)) return;
+        if (dataProps.All(v => v.Name != ValueField)) return;
+        @foreach (var item in Data)
+        {
+            var itemValue = item.GetType().GetProperty(ValueField).GetValue(item).ToString();
+            var itemText = item.GetType().GetProperty(DisplayField).GetValue(item).ToString();
+            <option value="@itemValue">
+                @itemText
+            </option>
+        }
+    }
+</select>

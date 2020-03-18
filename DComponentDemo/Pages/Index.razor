@@ -1,0 +1,109 @@
+﻿@page "/"
+@using DComponentDemo.Data
+@inject WeatherForecastService ForecastService
+
+<DList Data="@forecasts.ToList()"
+       IdField="@nameof(WeatherForecast.Id)"
+       TextField="@nameof(WeatherForecast.Summary)"
+       SelectMode="@DComponent.SelectMode.M"
+       @bind-SelectedData="@weatherForecast"></DList>
+@if (weatherForecast != null)
+{
+    <div>@(string.Join(',', weatherForecast?.Select(p => p.TemperatureC).ToList()))</div>
+}
+<DSpinEdit Width="200px"></DSpinEdit>
+
+<div style="width:600px;height:300px;margin-bottom:3px;margin-top:3px;">
+    <DPanel>
+        <HeaderContent>
+            <span>Header</span>
+        </HeaderContent>
+        <BodyContent>
+            <span>body</span>
+        </BodyContent>
+    </DPanel>
+</div>
+<div style="width:600px;height:300px;">
+    <DPanel>
+        <HeaderContent>
+            <span>Header</span>
+        </HeaderContent>
+        <BodyContent>
+            <DTree Data="@forecasts.ToList()" AutoExpandAll="true"
+                   IdField="@(nameof(WeatherForecast.Id))"
+                   ParentField="@(nameof(WeatherForecast.ParentId))"
+                   TextField="@(nameof(WeatherForecast.Summary))"></DTree>
+        </BodyContent>
+        <FooterContent>
+            <span>Footer</span>
+        </FooterContent>
+    </DPanel>
+</div>
+<div class="border-primary" style="width:100%;height:600px;">
+    <DLayout>
+        <DLayoutUp Height="120">
+            <span>测试up</span>
+            <DSpinEdit></DSpinEdit>
+            <DSpinEdit></DSpinEdit>
+        </DLayoutUp>
+        <DLayoutLeft Header="测试left" WidthP="20">
+            <span>测试left</span>
+        </DLayoutLeft>
+        <DLayoutCenter Header="测试center">
+            <DLayout>
+                <DLayoutCenter Header="layout嵌套测试center">
+                    <div><span><i class="fa fa-plus-circle fa-2x"></i></span></div>
+                </DLayoutCenter>
+            </DLayout>
+        </DLayoutCenter>
+        <DLayoutRight Header="测试right" WidthP="10">
+            <div><span><i class="fa fa-plus-circle fa-2x"></i></span></div>
+        </DLayoutRight>
+        <DLayoutDown Header="测试down" HeightP="20">
+            <span>测试down</span>
+        </DLayoutDown>
+    </DLayout>
+</div>
+<div style="width:100%;height:300px;">
+        <DFormLayout>
+            <DFormLayoutItem Caption="测试6" ColSpan="6">
+                <Template>
+                   <DSpinEdit></DSpinEdit>
+                </Template>
+            </DFormLayoutItem>
+            <DFormLayoutItem Caption="测试6" ColSpan="6">
+                <Template>
+                    <DSpinEdit></DSpinEdit>
+                </Template>
+            </DFormLayoutItem>
+            <DFormLayoutItem Caption="测试12" ColSpan="6">
+                <Template>
+                    <DSpinEdit></DSpinEdit>
+                </Template>
+            </DFormLayoutItem>
+            <DFormLayoutItem Caption="测试6" ColSpan="6">
+                <Template>
+                    <DSpinEdit></DSpinEdit>
+                </Template>
+            </DFormLayoutItem>
+            <DFormLayoutItem Caption="测试6" ColSpan="6">
+                <Template>
+                    <DSpinEdit></DSpinEdit>
+                </Template>
+            </DFormLayoutItem>
+            <DFormLayoutItem Caption="测试6" ColSpan="6">
+                <Template>
+                    <DSpinEdit></DSpinEdit>
+                </Template>
+            </DFormLayoutItem>
+        </DFormLayout>
+    </div>
+
+@code{
+    private List<WeatherForecast> weatherForecast;
+    private WeatherForecast[] forecasts;
+    protected override async Task OnInitializedAsync()
+    {
+        forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
+    }
+}

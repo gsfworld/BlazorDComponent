@@ -1,0 +1,34 @@
+﻿@namespace DComponent
+<div class="input-group DC_spinner" style="width:@Width" id="@Id">
+    <input type="text" class="form-control"
+           style="width: 99%;           
+           padding-top: 0px;
+           padding-bottom: 0px;
+           height: 26px;
+           line-height: 26px;"
+           disabled="@Disable"
+           value="@_value"
+           @onchange="@(e=> {
+                            _value = SetRange(SetFormate(_value)).ToString();
+                            if (CurrentValueChanged.HasDelegate)
+                                CurrentValueChanged.InvokeAsync(Convert.ToDecimal(_value));
+                        })"
+           @oninput="@(e=>_value=e.Value.ToString())"
+           @onkeydown="@(e=>{
+                             if (!string.IsNullOrEmpty(e.Key) && e.Key.Equals("Enter"))
+                                 _value = SetFormate(_value.ToString()).ToString();
+                         })" />
+    <div class="DC_spinner_input-group-btn-vertical">
+        <button disabled="@Disable" class="btn btn-link" @onclick="@(e=> {
+                                                              _value = SetRange(SetFormate(_value)+ Inc).ToString();
+
+                                                           })">
+            <i class="fa fa-caret-up"></i>
+        </button>
+        <button disabled="@Disable" class="btn btn-link" @onclick="@(e=>{
+                                                                 _value = SetRange(SetFormate(_value)- Inc).ToString();
+                                                             })">
+            <i class="fa fa-caret-down"></i>
+        </button>
+    </div>
+</div>

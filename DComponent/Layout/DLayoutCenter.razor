@@ -1,0 +1,27 @@
+﻿@namespace DComponent
+@code {
+    [CascadingParameter]
+    protected DLayoutHandler _dLayout { get; set; }
+    [Parameter]
+    public string Header { get; set; }
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        _dLayout.InitElement(new LayoutElement
+        {
+            ElementType = LayoutElementType.C,
+            Id = $"DC{Guid.NewGuid().ToString().Replace("-", "")}",
+            WidthP = 100,
+            HeightP = 100,
+            SourceWidthP = 100,
+            SourceHeightP = 100,
+            Spliter = false,
+            Header = Header,
+            ElementContext = ChildContent
+        });
+    }
+}

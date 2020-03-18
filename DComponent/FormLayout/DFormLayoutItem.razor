@@ -1,0 +1,27 @@
+﻿@namespace DComponent
+    
+@code {
+    [CascadingParameter]
+    protected DFormLayoutHandler _dFormLayout { get;set;}
+    [Parameter]
+    public string Caption { get; set; }
+    [Parameter]
+    public int Height { get; set; } = 40;
+    [Parameter]
+    public int ColSpan { get; set; }
+    [Parameter]
+    public RenderFragment Template { get; set; }
+    private string id = Guid.NewGuid().ToString().Replace("-", "");
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        _dFormLayout.LayoutElements.Add(id,new FormLayoutItem
+        {
+            Caption = Caption,
+            ColSpan = ColSpan,
+            Template = Template,
+            Height=Height
+        });
+    }
+}
