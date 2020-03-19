@@ -20,3 +20,5 @@ Blazor企业应用开发组件 .netcore 3.1
 | DDate |input日期选择
 | DTable |符合企业应用使用的Tabel组件 分页 行过滤 分组 footer信息 主从 行內新增编辑
 | DDialog |bootstrap Dialog
+| DStepLayout |分步展示组件，新增
+| DTab |tab展示组件，新增

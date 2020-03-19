@@ -37,7 +37,7 @@
                IdField="@(nameof(WeatherForecast.Id))"
                ParentField="@(nameof(WeatherForecast.ParentId))"
                TextField="@(nameof(WeatherForecast.Summary))"></DTree>
-    </BodyContent>    
+    </BodyContent>
 </DPanel>
 
 <DPanel Style="margin-top:10px;height:600px;">
@@ -45,7 +45,7 @@
     <BodyContent>
         <DLayout>
             <DLayoutUp Height="100">
-                <span>测试up</span>                
+                <span>测试up</span>
             </DLayoutUp>
             <DLayoutLeft Header="测试left" WidthP="20">
                 <DLayout>
@@ -127,7 +127,75 @@
             </DFormLayoutItem>
         </DFormLayout>
     </BodyContent>
-</DPanel>    
+</DPanel>
+
+<DPanel Style="margin-top:10px;height:300px;">
+    <HeaderContent>DStepLayout组件</HeaderContent>
+    <BodyContent>
+        <DStepLayout>
+            <DStepLayoutItem Title="步骤一" StepAction="@(async ()=> {
+                                       return true;
+                                   })">
+                <DSpinEdit Width="200px"></DSpinEdit>
+            </DStepLayoutItem>
+            <DStepLayoutItem Title="步骤二" StepAction="@(async ()=> {
+                                       return true;
+                                   })">
+                <DSpinEdit Width="200px"></DSpinEdit>
+            </DStepLayoutItem>
+            <DStepLayoutItem Title="步骤三" StepAction="@(async ()=> {
+                                       return true;
+                                   })">
+                <span>步骤三内容</span>
+            </DStepLayoutItem>
+            <DStepLayoutItem Title="步骤四" StepAction="@(async ()=> {
+                                       return true;
+                                   })">
+                <span>步骤四内容</span>
+            </DStepLayoutItem>
+        </DStepLayout>
+    </BodyContent>
+</DPanel>
+
+<DPanel Style="margin-top:10px;height:300px;">
+    <HeaderContent>DTab组件</HeaderContent>
+    <BodyContent>
+        <div style="width:600px;">
+            <DTab>
+                <DTabPanel IsClosable="true" Name="1" Title="tab1">
+                    <span>tab1</span>
+                </DTabPanel>
+                <DTabPanel IsClosable="true" Name="2" Title="tab2">
+                    <span>tab2</span>
+                </DTabPanel>
+                <DTabPanel IsClosable="true" Name="3" Title="tab3">
+                    <span>tab3</span>
+                </DTabPanel>
+                <DTabPanel IsClosable="true" Name="4" Title="tab4">
+                    <span>tab4</span>
+                </DTabPanel>
+                <DTabPanel IsClosable="true" Name="5" Title="tab5">
+                    <span>tab5</span>
+                </DTabPanel>
+                <DTabPanel IsClosable="true" Name="6" Title="tab6">
+                    <span>tab6</span>
+                </DTabPanel>
+                <DTabPanel IsClosable="true" Name="8" Title="tab8">
+                    <span>tab8</span>
+                </DTabPanel>
+                <DTabPanel IsClosable="true" Name="9" Title="tab9">
+                    <span>tab9</span>
+                </DTabPanel>
+                <DTabPanel IsClosable="true" Name="10" Title="tab10">
+                    <span>tab10</span>
+                </DTabPanel>
+                <DTabPanel IsClosable="true" Name="11" Title="tab11">
+                    <span>tab11</span>
+                </DTabPanel>                
+            </DTab>
+        </div>        
+    </BodyContent>
+</DPanel>
 
 
 @code{
@@ -139,7 +207,7 @@
     {
         forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
         _user = new List<SysUser>
-    {
+{
             new SysUser
             {
                 UserId=Guid.NewGuid().ToString(),
@@ -183,7 +251,7 @@
         };
 
         _Org = new List<SysOrg>
-    {
+{
             new SysOrg
             {
                 OrgId="o1",
