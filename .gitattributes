@@ -4,7 +4,7 @@
 ###############################################################################
 # Set default behavior to automatically normalize line endings.
 ###############################################################################
-* text=auto
+#* text=auto
 
 ###############################################################################
 # Set default behavior for command prompt diff.
@@ -13,7 +13,7 @@
 # default for csharp files.
 # Note: This is only used by command line
 ###############################################################################
-*.cs     diff=csharp
+#*.cs     diff=csharp
 
 ###############################################################################
 # Set the merge driver for project and solution files
@@ -25,8 +25,8 @@
 # these files as binary and thus will always conflict and require user
 # intervention with every merge. To do so, just uncomment the entries below
 ###############################################################################
-*.sln       merge=binary
-*.csproj    merge=binary
+#*.sln       merge=binary
+#*.csproj    merge=binary
 #*.vbproj    merge=binary
 #*.vcxproj   merge=binary
 #*.vcproj    merge=binary
@@ -43,9 +43,9 @@
 #
 # image files are treated as binary by default.
 ###############################################################################
-*.jpg   binary
-*.png   binary
-*.gif   binary
+#*.jpg   binary
+#*.png   binary
+#*.gif   binary
 
 ###############################################################################
 # diff behavior for common document formats
