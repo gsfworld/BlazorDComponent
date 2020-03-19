@@ -28,6 +28,7 @@ Blazor企业应用开发组件
     <PackageId>BlazorDComponent</PackageId>
     <Product>BlazorDComponent</Product>
     <PackageProjectUrl>https://github.com/gsfworld/BlazorDComponent</PackageProjectUrl>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29827.131
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DComponent", "DComponent\DComponent.csproj", "{ADA9DBD2-0A07-42FA-8AEC-31167030D1E4}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DComponentDemo", "DComponentDemo\DComponentDemo.csproj", "{BB512A44-F048-45EC-B001-DB9724786BAB}"
 EndProject
 Global
@@ -13,10 +11,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{ADA9DBD2-0A07-42FA-8AEC-31167030D1E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ADA9DBD2-0A07-42FA-8AEC-31167030D1E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ADA9DBD2-0A07-42FA-8AEC-31167030D1E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ADA9DBD2-0A07-42FA-8AEC-31167030D1E4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BB512A44-F048-45EC-B001-DB9724786BAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BB512A44-F048-45EC-B001-DB9724786BAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB512A44-F048-45EC-B001-DB9724786BAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
