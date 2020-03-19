@@ -1,7 +1,10 @@
 # BlazorDComponent
 Blazor企业应用开发组件 .netcore 3.1
-#### 引入资源文件
+#### 组件包安装地址
+https://www.nuget.org/packages/BlazorDComponent/1.0.2
+#### 服务端模式：_Host.cshtml 引入资源文件 
 ```javascript
+<script src="_content/BlazorDComponent/jquery.min.js"></script>
 <script src="_content/BlazorDComponent/DComponent.js"></script>
 <link href="_content/BlazorDComponent/DComponent.css" rel="stylesheet" />
 ```
