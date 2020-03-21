@@ -2,6 +2,8 @@
 Blazor企业应用开发组件 .netcore 3.1
 #### 组件包安装地址
 https://www.nuget.org/packages/BlazorDComponent/1.0.2
+#### demo运行地址
+http://www.zhedev.cn/
 #### 服务端模式：_Host.cshtml 引入资源文件 
 ```javascript
 <script src="_content/BlazorDComponent/jquery.min.js"></script>
