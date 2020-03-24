@@ -1,0 +1,54 @@
+﻿@page "/DTableGroupDemo"
+@using DComponentDemo.Model
+@using DComponentDemo.Data
+<DLayout>
+    <DLayoutLeft Header="部门信息" WidthP="20">
+        <DList Data="@_Org"
+               IdField="@(nameof(SysOrg.OrgId))"
+               TextField="@(nameof(SysOrg.OrgName))"
+               @bind-SingleSelectedData="@sSelected"></DList>
+    </DLayoutLeft>
+    <DLayoutCenter Header="用户信息">
+        <DTable Data="@_dUser" ShowGroup="true" ShowFooter="true">
+            <ColumnContext>
+                <DTableTextColumn FieldName="@nameof(SysUser.UserId)" Caption="编号" EditMode="@FieldEditMode.ReadOnly" FooterMark="合计：{0}" FooterStateType="@ColumnStateType.S"></DTableTextColumn>
+                <DTableTextColumn FieldName="@nameof(SysUser.LoginId)" Caption="账号" FooterMark="记录总数：{0}"></DTableTextColumn>
+                <DTableTextColumn FieldName="@nameof(SysUser.UserName)" Caption="名称" IsGroup="true" GroupMark="分组记录数：{0}"></DTableTextColumn>
+                <DTableCustomColumn FieldName="@nameof(SysUser.IsOnline)" Caption="在线？">
+                    <CustomContext>
+                        <button class="toolbarBtn btn btn-link " name="编辑" title="编辑">
+                            <i class="fa fa-pencil fa-2x"></i>
+                        </button>
+                        @((context as SysUser).UserName)
+                    </CustomContext>
+                </DTableCustomColumn>
+                <DTableCheckboxColumn FieldName="@nameof(SysUser.IsUse)" Caption="启用？" ShowFilter="false"></DTableCheckboxColumn>
+                <DTableLookupColumn FieldName="@nameof(SysUser.OrgId)" Data="_Org" DisplayField="@nameof(SysOrg.OrgName)" ValueField="@nameof(SysOrg.OrgId)" Caption="所属部门"></DTableLookupColumn>
+            </ColumnContext>
+        </DTable>
+    </DLayoutCenter>
+</DLayout>
+
+
+@code {
+    private List<SysUser> _user;
+    private List<SysUser> _dUser = new List<SysUser>();
+    private List<SysOrg> _Org;
+    private List<SysUser> mSelected = new List<SysUser>();
+    private SysOrg _sSelected;
+    private SysOrg sSelected
+    {
+        get => _sSelected;
+        set
+        {
+            _sSelected = value;
+            _dUser = _user.Where(p => p.OrgId == value.OrgId).ToList();
+        }
+    }
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        _user = BaseHelper.GetDemoUserTree();
+        _Org = BaseHelper.GetDemoOrg();
+    }
+}
