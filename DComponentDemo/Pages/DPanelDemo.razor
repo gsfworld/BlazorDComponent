@@ -1,0 +1,37 @@
+﻿@page "/DPanelDemo"
+@using DComponentDemo.Model
+@using DComponentDemo.Data
+    <DTab>
+        <DTabPanel Name="1" Title="DPanel组件">
+            <DPanel Style="margin-top:10px;">
+                <HeaderContent>组件HeaderContent</HeaderContent>
+                <BodyContent>
+                    <div style="height:300px;">
+                        组件BodyContent
+                    </div>                   
+                </BodyContent>
+                <FooterContent>
+                    组件FooterContent
+                </FooterContent>
+            </DPanel>
+        </DTabPanel>
+        <DTabPanel Name="2" Title="代码">
+            <pre>
+            @(mCode)
+         </pre>
+        </DTabPanel>        
+    </DTab>    
+@code {
+    private string mCode = @"    
+<DPanel Style=""margin-top:10px;"">
+        <HeaderContent>组件HeaderContent</HeaderContent>
+        <BodyContent>
+            <div style=""height:300px;"">
+              组件BodyContent
+           </div>  
+        </BodyContent>
+        <FooterContent>
+            组件FooterContent
+        </FooterContent>
+    </DPanel>";
+}

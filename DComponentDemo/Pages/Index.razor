@@ -1,42 +1,16 @@
 ﻿@page "/"
 @using DComponentDemo.Data
+@using DComponentDemo.Model
 @inject WeatherForecastService ForecastService
 
-<DPanel Style="margin-top:10px;">
-    <HeaderContent>DList组件</HeaderContent>
-    <BodyContent>
-        <DLayout>
-            <DLayoutLeft WidthP="70">
-                <DList Data="@forecasts.ToList()"
-                       IdField="@nameof(WeatherForecast.Id)"
-                       TextField="@nameof(WeatherForecast.Summary)"
-                       SelectMode="@DComponent.SelectMode.M"
-                       @bind-SelectedData="@weatherForecast"></DList>
-            </DLayoutLeft>
-            <DLayoutCenter>
-                @if (weatherForecast != null)
-                {
-                    <div>选择项温度：@(string.Join(',', weatherForecast?.Select(p => p.TemperatureC).ToList()))</div>
-                }
-            </DLayoutCenter>
-        </DLayout>
-    </BodyContent>
-</DPanel>
 
-<DPanel Style="margin-top:10px;">
-    <HeaderContent>DSpinEdit组件</HeaderContent>
-    <BodyContent>
-        <DSpinEdit Width="200px"></DSpinEdit>
-    </BodyContent>
-</DPanel>
+
+
 
 <DPanel Style="margin-top:10px;">
     <HeaderContent>DTree组件</HeaderContent>
     <BodyContent>
-        <DTree Data="@forecasts.ToList()" AutoExpandAll="true"
-               IdField="@(nameof(WeatherForecast.Id))"
-               ParentField="@(nameof(WeatherForecast.ParentId))"
-               TextField="@(nameof(WeatherForecast.Summary))"></DTree>
+        
     </BodyContent>
 </DPanel>
 
@@ -191,9 +165,9 @@
                 </DTabPanel>
                 <DTabPanel IsClosable="true" Name="11" Title="tab11">
                     <span>tab11</span>
-                </DTabPanel>                
+                </DTabPanel>
             </DTab>
-        </div>        
+        </div>
     </BodyContent>
 </DPanel>
 
@@ -265,20 +239,4 @@
         };
     }
 
-    public class SysUser
-    {
-        public string UserId { get; set; }
-        public string LoginId { get; set; }
-        public string UserName { get; set; }
-        public string IsOnline { get; set; }
-        public string IsUse { get; set; }
-        public string OrgId { get; set; }
-        public DateTime CreateDate { get; set; }
-    }
-
-    public class SysOrg
-    {
-        public string OrgId { get; set; }
-        public string OrgName { get; set; }
-    }
 }

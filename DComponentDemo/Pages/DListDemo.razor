@@ -1,0 +1,93 @@
+﻿@page "/DListDemo"
+@using DComponentDemo.Model
+@using DComponentDemo.Data
+
+    <DTab>
+        <DTabPanel Name="1" Title="DList组件（多选）">
+            <div>
+                <span>选择项：@string.Join(",", mSelected.Select(p => p.UserName))</span>
+            </div>
+            <DList Data="@_user"
+                   IdField="@nameof(SysUser.UserId)"
+                   TextField="@nameof(SysUser.UserName)"
+                   SelectMode="@SelectMode.M"
+                   @bind-SelectedData="@mSelected"></DList>
+        </DTabPanel>
+        <DTabPanel Name="2" Title="代码">
+            <pre>
+            @(mCode)
+         </pre>
+
+        </DTabPanel>
+        <DTabPanel Name="3" Title="data">
+         <pre>
+            @(commonCode)
+         </pre>
+
+        </DTabPanel>
+    </DTab>
+    <div class="mt-3">
+        <DTab>
+            <DTabPanel Name="1" Title="DList组件（单选）">
+                <div>
+                    <span>选择项：@sSelected?.UserName</span>
+                </div>
+                <DList Data="@_user"
+                       IdField="@nameof(SysUser.UserId)"
+                       TextField="@nameof(SysUser.UserName)"
+                       SelectMode="@SelectMode.S"
+                       @bind-SingleSelectedData="@sSelected"></DList>
+            </DTabPanel>
+            <DTabPanel Name="2" Title="代码">
+                <pre>
+            @(sCode)
+         </pre>
+
+            </DTabPanel>
+            <DTabPanel Name="3" Title="data">
+                <pre>
+            @(commonCode)
+         </pre>
+
+            </DTabPanel>
+        </DTab>
+    </div>
+    
+
+@code{
+    private List<SysUser> _user;
+    private List<SysOrg> _Org;
+    private List<SysUser> mSelected = new List<SysUser>();
+    private SysUser sSelected;
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        _user = BaseHelper.GetDemoUser();
+        _Org = BaseHelper.GetDemoOrg();
+    }
+    private string commonCode = @"
+    private List<SysUser> _user;
+    private List<SysOrg> _Org;
+    private List<SysUser> mSelected = new List<SysUser>();
+    private SysUser sSelected;";
+    private string mCode = @"    
+<div>
+<span>选择项：@string.Join("","", mSelected.Select(p => p.UserName))</span>
+</div>
+<DList Data=""@_user""
+   IdField=""@nameof(SysUser.UserId)""
+   TextField=""@nameof(SysUser.UserName)""
+   SelectMode=""@SelectMode.M""
+   @bind-SelectedData=""@mSelected"">
+</DList>";
+    private string sCode = @"
+<div>
+<span>选择项：@sSelected?.UserName</span>
+</div>
+<DList Data=""@_user""
+   IdField=""@nameof(SysUser.UserId)""
+   TextField=""@nameof(SysUser.UserName)""
+   SelectMode=""@SelectMode.S""
+   @bind-SingleSelectedData=""@sSelected"">
+</DList>";
+}
